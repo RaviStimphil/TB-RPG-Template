@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameter: 0
   fromSource: 1
-  damageScalingMultipler: 1
+  damageScalingMultipler: 0.4

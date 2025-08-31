@@ -10,14 +10,24 @@ public class BattleControl : MonoBehaviour
 
     public List<GameObject> activeUnits;
 
+    public List<UnitAction> actionQueue;
+
     public string winner = "";
     public UnityEvent BattleComplete;
     public bool endBattle; 
     public int turnCount;
+    public UnitAction actOne;
+    public UnitAction actTwo;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        actOne = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
+        actTwo = new UnitAction(enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>().skills[0]);
+        AddToActionQueue(actOne);
+        AddToActionQueue(actTwo);
+
     }
 
 
@@ -31,9 +41,21 @@ public class BattleControl : MonoBehaviour
 
     public void BattleLoop(){
         
-        TurnStart();
-        TurnAction();
-        
+        //TurnStart();
+        //TurnAction();
+        Debug.Log("Something happened");
+        BeforeActionExecute(actOne);
+        DuringActionExecute(actOne);
+        AfterActionExecute(actOne);
+
+        BeforeActionExecute(actTwo);
+        DuringActionExecute(actTwo);
+        AfterActionExecute(actTwo);
+
+        if(AddAliveMembers(allyUnits.ToArray()).Count == 0 || AddAliveMembers(enemyUnits.ToArray()).Count == 0){
+            endBattle = true;
+            Debug.Log("It has ended");
+        }
         
     }
 
@@ -98,6 +120,30 @@ public class BattleControl : MonoBehaviour
             }
             activeUnits.RemoveAt(0);
         }
+    }
+    public void te(){
+        
+    }
+    public void AddToActionQueue(UnitAction action){
+        actionQueue.Add(action);
+    }
+    public void RemoveFromActionQueue(UnitAction action){
+        actionQueue.Remove(action);
+    }
+    public void BeforeActionExecute(UnitAction action){
+        if(action.mainTarget.isDead){
+            Debug.Log("Target is dead");
+        }else{
+            action.skill.BeforeSkillExecute();
+        }
+    }
+    public void DuringActionExecute(UnitAction action){
+        action.skill.SkillExecute(action.source, action.mainTarget);
+    }
+
+    public void AfterActionExecute(UnitAction action){
+        action.skill.AfterSkillExecute();
+        //RemoveFromActionQueue(action);
     }
 
 

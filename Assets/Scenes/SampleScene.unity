@@ -160,6 +160,8 @@ MonoBehaviour:
   takeDamage:
     m_PersistentCalls:
       m_Calls: []
+  skills:
+  - {fileID: 11400000, guid: 9a0e7b4f6b45987489be10d2729b96b1, type: 2}
 --- !u!4 &107586036
 Transform:
   m_ObjectHideFlags: 0
@@ -212,6 +214,8 @@ MonoBehaviour:
   takeDamage:
     m_PersistentCalls:
       m_Calls: []
+  skills:
+  - {fileID: 11400000, guid: 9a0e7b4f6b45987489be10d2729b96b1, type: 2}
 --- !u!4 &392956605
 Transform:
   m_ObjectHideFlags: 0

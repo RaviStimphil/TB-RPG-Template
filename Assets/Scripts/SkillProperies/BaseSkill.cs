@@ -22,6 +22,7 @@ public class BaseSkill : ScriptableObject
     }
     public bool targetDead;
     public int numberOfRepeats;
+    public int skillPriority;
     public List<string> skillCatagories;
 
     public DamageSkillAddon[] damagePart;
@@ -29,5 +30,24 @@ public class BaseSkill : ScriptableObject
 
     public int damageCal(UnitStats stats){
         return damagePart[0].CalulateTotalDamage(stats);
+    }
+
+    public void BeforeSkillExecute(){
+        
+    }
+
+    public void AfterSkillExecute(){
+
+    }
+    public void SkillExecute(Unit source, Unit target){
+        if(damagePart.Length > 0){
+            DealDamage(source, target, damageCal(source.unitStat));
+        }
+
+    }
+
+    public void DealDamage(Unit source, Unit target, int amount){
+        target.unitStat.currentHealth -= amount;
+        Debug.Log(target.name + " has " + target.unitStat.currentHealth + " remaining.");
     }
 }
