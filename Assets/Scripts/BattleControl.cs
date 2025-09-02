@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
 
 public class BattleControl : MonoBehaviour
 {
@@ -23,11 +24,21 @@ public class BattleControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        actionQueue = new List<UnitAction>();
+        if(actOne != null){
+            Debug.Log("Not null baby");
+        }else{
+            Debug.Log("Is null");
+        }
         actOne = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
         actTwo = new UnitAction(enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>().skills[0]);
-        AddToActionQueue(actOne);
-        AddToActionQueue(actTwo);
+        
+        //AddToActionQueue(actOne);
+        //AddToActionQueue(actTwo);
 
+        UnitAction newAction = null;
+        newAction = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
+        
     }
 
 
@@ -43,20 +54,76 @@ public class BattleControl : MonoBehaviour
         
         //TurnStart();
         //TurnAction();
+        /*
         Debug.Log("Something happened");
-        BeforeActionExecute(actOne);
-        DuringActionExecute(actOne);
-        AfterActionExecute(actOne);
+
+
+        BeforeActionExecute(actionQueue[0]);
+        DuringActionExecute(actionQueue[0]);
+        AfterActionExecute(actionQueue[0]);
 
         BeforeActionExecute(actTwo);
         DuringActionExecute(actTwo);
         AfterActionExecute(actTwo);
 
+        
+        */
+        MakeAddNewAction();
+        UnitAction[] tempActions = SortActionQueue(actionQueue.ToArray());
+        actionQueue.Clear();
+        actionQueue.AddRange(tempActions);
+        ThroughActionQueue();
         if(AddAliveMembers(allyUnits.ToArray()).Count == 0 || AddAliveMembers(enemyUnits.ToArray()).Count == 0){
             endBattle = true;
             Debug.Log("It has ended");
         }
+
         
+    }
+
+    
+
+    public void FullActionExecute(UnitAction action){
+        BeforeActionExecute(action);
+        DuringActionExecute(action);
+        AfterActionExecute(action);
+    }
+    
+    public void ThroughActionQueue(){
+        //Please note that this is likely to fail.
+        for(int i = 0; i < actionQueue.Count; i++){
+            if(actionQueue[i].checkedThrough == false){
+                if(actionQueue[i].turnCount <= 0){
+                    FullActionExecute(actionQueue[i]);
+                    actionQueue.Remove(actionQueue[i]);
+                    i--;
+                }else{
+                    actionQueue[i].checkedThrough = true;
+                    actionQueue[i].turnCount -= 1;
+                }
+            }
+        }
+        
+    }
+
+    public UnitAction[] SortActionQueue(UnitAction[] actions){
+        UnitAction[] newOrder = new UnitAction[actions.Length];
+        for(int i = 0; i < newOrder.Length; i++){
+            for(int j = i; j < newOrder.Length; j++){
+                if(j == i){
+                    newOrder[i] = actions[j];
+                }
+                else{
+                    if(newOrder[i].turnCount > actions[j].turnCount){
+                        newOrder[i] = actions[j];
+                    }
+                    else if(newOrder[i].turnOrder < actions[j].turnOrder){
+                        newOrder[i] = actions[j];
+                    }
+                }
+            }
+        }
+        return newOrder;
     }
 
     public void RevealVictor(){
@@ -68,16 +135,26 @@ public class BattleControl : MonoBehaviour
     }
 
     public GameObject TopAliveUnit(List<GameObject> army){
-    if (army == null || army.Count == 0) return null;
+        if (army == null || army.Count == 0) return null;
 
-    for (int i = 0; i < army.Count; i++){
-        if (army[i] != null && !army[i].gameObject.GetComponent<Unit>().isDead){
-            return army[i]; // first alive one
+        for (int i = 0; i < army.Count; i++){
+            if (army[i] != null && !army[i].gameObject.GetComponent<Unit>().isDead){
+                return army[i]; 
+            }
         }
+
+        return null; 
     }
 
-    return null; // none alive
-}
+    public void MakeAddNewAction(){
+        UnitAction allyAction = null;
+        allyAction = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
+        AddToActionQueue(allyAction);
+
+        UnitAction enemyAction = null;
+        enemyAction = new UnitAction(enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>().skills[0]);
+        AddToActionQueue(enemyAction);
+    }
 
     public void TurnStart(){
         Debug.Log("Turn Count: " + turnCount);
@@ -125,6 +202,10 @@ public class BattleControl : MonoBehaviour
         
     }
     public void AddToActionQueue(UnitAction action){
+        if(action == null){
+            Debug.Log("action is null");
+        }
+        Debug.Log(actionQueue.Count);
         actionQueue.Add(action);
     }
     public void RemoveFromActionQueue(UnitAction action){

@@ -23,6 +23,7 @@ public class BaseSkill : ScriptableObject
     public bool targetDead;
     public int numberOfRepeats;
     public int skillPriority;
+    public int turnDelay; 
     public List<string> skillCatagories;
 
     public DamageSkillAddon[] damagePart;
@@ -49,5 +50,9 @@ public class BaseSkill : ScriptableObject
     public void DealDamage(Unit source, Unit target, int amount){
         target.unitStat.currentHealth -= amount;
         Debug.Log(target.name + " has " + target.unitStat.currentHealth + " remaining.");
+        if(target.unitStat.currentHealth <= 0){
+            target.isDead = true;
+
+        }
     }
 }
