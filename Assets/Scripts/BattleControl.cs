@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,8 @@ public class BattleControl : MonoBehaviour
     public int turnCount;
     public UnitAction actOne;
     public UnitAction actTwo;
+
+    public static event Action<UnitAction> AfterActionEvent;
 
 
     // Start is called before the first frame update
@@ -52,22 +55,7 @@ public class BattleControl : MonoBehaviour
 
     public void BattleLoop(){
         
-        //TurnStart();
-        //TurnAction();
-        /*
-        Debug.Log("Something happened");
-
-
-        BeforeActionExecute(actionQueue[0]);
-        DuringActionExecute(actionQueue[0]);
-        AfterActionExecute(actionQueue[0]);
-
-        BeforeActionExecute(actTwo);
-        DuringActionExecute(actTwo);
-        AfterActionExecute(actTwo);
-
-        
-        */
+  
         MakeAddNewAction();
         UnitAction[] tempActions = SortActionQueue(actionQueue.ToArray());
         actionQueue.Clear();
@@ -87,6 +75,7 @@ public class BattleControl : MonoBehaviour
         BeforeActionExecute(action);
         DuringActionExecute(action);
         AfterActionExecute(action);
+        AfterActionEvent?.Invoke(action);
     }
     
     public void ThroughActionQueue(){
@@ -197,9 +186,6 @@ public class BattleControl : MonoBehaviour
             }
             activeUnits.RemoveAt(0);
         }
-    }
-    public void te(){
-        
     }
     public void AddToActionQueue(UnitAction action){
         if(action == null){

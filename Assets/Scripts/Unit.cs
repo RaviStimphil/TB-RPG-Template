@@ -10,9 +10,19 @@ public class Unit : MonoBehaviour
     public string unitName;
     public bool isDead;
     public bool isGood;
-    public UnityEvent takeDamage;
     public List<BaseSkill> skills; 
     
+    void OnEnable(){
+        Debug.Log("Subscribing " + name);
+        BattleControl.AfterActionEvent += RespondToEvent;
+    }
+    void OnDisable(){
+        BattleControl.AfterActionEvent -= RespondToEvent;
+    }
+
+    public void RespondToEvent(UnitAction action){
+        Debug.Log("It is currently working" + name);
+    }
     void Start(){
         unitStat = Instantiate(originStat);
     }
@@ -37,7 +47,6 @@ public class Unit : MonoBehaviour
             isDead = true;
 
         }
-        takeDamage.Invoke();
         
     }
 }
