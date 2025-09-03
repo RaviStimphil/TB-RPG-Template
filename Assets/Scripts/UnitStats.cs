@@ -16,7 +16,7 @@ public class UnitStats : ScriptableObject
     private List<Buff> buffs;
 
     public int basePhysicalDefense;
-    public float ratioPhysicalDefense;
+    public float ratioPhysicalDefense = 1.0f;
     public int addedPhysicalDefense;
     public int equipPhysicalDefense; 
     public int finalPhysicalDefense;
