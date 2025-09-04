@@ -19,7 +19,9 @@ public class UnitAction
     public void CalulateTurnOrder(){
         turnOrder = ParameterMath.ActionPriority(source, skill);
     }
+    public UnitAction(){
 
+    }
     public UnitAction(Unit source, Unit mainTarget, BaseSkill skill){
         if(source == null){
             Debug.Log("source is null");
@@ -35,6 +37,7 @@ public class UnitAction
         this.mainTarget = mainTarget;
         this.skill = skill;
     }
+    
 
     /*public void AddTargets(Unit[] targets){
         //this.targets.AddRange(targets);
