@@ -14,6 +14,7 @@ public class BattleChooseButton : MonoBehaviour
     public static event Action<Unit> chooseSource;
     public static event Action<BaseSkill> chooseSkill;
     public static event Action<Unit> chooseMainTarget;
+    public static event Action addCurrentAction;
     public static event Action<Unit> clearUnitAction;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +41,10 @@ public class BattleChooseButton : MonoBehaviour
     public void ChooseSkill(){
         Debug.Log("Skill goes through");
         chooseSkill?.Invoke(skill);
+    }
+
+    public void AddToCurrentAction(){
+        addCurrentAction?.Invoke();
     }
 
 }

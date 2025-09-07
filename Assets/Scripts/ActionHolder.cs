@@ -9,6 +9,9 @@ public class ActionHolder : MonoBehaviour
 {
     public UnitAction tempAction;
     public GameObject testUnit;
+    public List<UnitAction> currentActions;
+
+    public static event Action<List<UnitAction>> playerActions;
     
 
     void Start()
@@ -21,6 +24,7 @@ public class ActionHolder : MonoBehaviour
         BattleChooseButton.chooseSource += AddSource;
         BattleChooseButton.chooseMainTarget += AddMainTarget;
         BattleChooseButton.chooseSkill += AddSkill;
+
     }
     void OnDisable(){
         BattleChooseButton.chooseSource -= AddSource;
@@ -44,8 +48,12 @@ public class ActionHolder : MonoBehaviour
         tempAction.mainTarget = unit.gameObject.GetComponent<Unit>();
         Debug.Log(tempAction.mainTarget.name);
        
+    }
+    public void AddCurrentAction(){
+        currentActions.Add(tempAction);
     } 
     
+
 
 
     // Update is called once per frame

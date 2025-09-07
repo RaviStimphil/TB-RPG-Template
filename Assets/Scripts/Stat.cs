@@ -2,17 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Stat : MonoBehaviour
+public class Stat 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public int baseValue;
+    public int equipmentValue;
+    public float ratioValue;
+    public int addedValue;
+    public int finalValue;
+
+    public void AssignBaseValue(int value){
+        baseValue = value;
+    }
+    public void AdjustRatio(float value){
+        ratioValue += value;
+    }
+    
+    public void AdjustDifference(int value){
+        addedValue += value;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void AssignEquipValue(int value){
+        equipmentValue = value;
     }
+
+    //public void
 }

@@ -24,6 +24,12 @@ public class BattleControl : MonoBehaviour
     public static event Action<UnitAction> AfterActionEvent;
 
 
+    void OnEnable(){
+
+    }
+    void OnDisable(){
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
