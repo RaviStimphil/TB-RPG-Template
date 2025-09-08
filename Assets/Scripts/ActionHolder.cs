@@ -11,9 +11,11 @@ public class ActionHolder : MonoBehaviour
     public GameObject testUnit;
     public List<UnitAction> currentActions;
 
-    public static event Action<List<UnitAction>> playerActions;
+    public static event Action<UnitAction[]> playerActions;
     
-
+    void Awake(){
+        currentActions = new List<UnitAction>();
+    }
     void Start()
     {
         tempAction = new UnitAction();
@@ -24,12 +26,14 @@ public class ActionHolder : MonoBehaviour
         BattleChooseButton.chooseSource += AddSource;
         BattleChooseButton.chooseMainTarget += AddMainTarget;
         BattleChooseButton.chooseSkill += AddSkill;
+        BattleChooseButton.addCurrentAction += AddCurrentAction;
 
     }
     void OnDisable(){
         BattleChooseButton.chooseSource -= AddSource;
         BattleChooseButton.chooseMainTarget -= AddMainTarget;
         BattleChooseButton.chooseSkill -= AddSkill;
+        BattleChooseButton.addCurrentAction -= AddCurrentAction;
     }
     public void AddSource(Unit unit){
         Debug.Log("Added Source");
@@ -53,6 +57,10 @@ public class ActionHolder : MonoBehaviour
         currentActions.Add(tempAction);
     } 
     
+    public void SendPlayerActions(){
+        playerActions?.Invoke(currentActions.ToArray());
+        currentActions.Clear();
+    }
 
 
 

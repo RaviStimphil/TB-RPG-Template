@@ -25,10 +25,10 @@ public class BattleControl : MonoBehaviour
 
 
     void OnEnable(){
-
+        ActionHolder.playerActions += BattleLooper;
     }
     void OnDisable(){
-        
+        ActionHolder.playerActions += BattleLooper;
     }
     // Start is called before the first frame update
     void Start()
@@ -54,11 +54,15 @@ public class BattleControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {   
-        if(!endBattle){
+        /*if(!endBattle){
             BattleLoop();
-        }
+        }*/
     }
 
+    public void BattleLooper(UnitAction[] actions){
+        actionQueue.AddRange(actions);
+        BattleLoop();
+    }
     public void BattleLoop(){
         
   
