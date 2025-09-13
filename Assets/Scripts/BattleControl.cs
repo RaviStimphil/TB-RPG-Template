@@ -66,7 +66,7 @@ public class BattleControl : MonoBehaviour
     public void BattleLoop(){
         
   
-        MakeAddNewAction();
+        //MakeAddNewAction();
         UnitAction[] tempActions = SortActionQueue(actionQueue.ToArray());
         actionQueue.Clear();
         actionQueue.AddRange(tempActions);
