@@ -12,6 +12,7 @@ public class ActionHolder : MonoBehaviour
     public List<UnitAction> currentActions;
 
     public static event Action<UnitAction[]> playerActions;
+    public static event Action<Unit> chooseSource; 
     
     void Awake(){
         currentActions = new List<UnitAction>();
@@ -23,27 +24,29 @@ public class ActionHolder : MonoBehaviour
 
     void OnEnable(){
         Debug.Log("Subscribing " + name);
-        AllyButtonUI.chooseSource += AddSource;
+        AllyButtonUI.allyButtonPress += AddSource;
         BattleChooseButton.chooseMainTarget += AddMainTarget;
-        BattleChooseButton.chooseSkill += AddSkill;
+        ActionBattleButton.actionButtonPress += AddSkill;
         BattleChooseButton.addCurrentAction += AddCurrentAction;
         BattleControl.startOfTurnEvent += AddFirstSource;
 
     }
     void OnDisable(){
-        AllyButtonUI.chooseSource -= AddSource;
+        AllyButtonUI.allyButtonPress -= AddSource;
         BattleChooseButton.chooseMainTarget -= AddMainTarget;
-        BattleChooseButton.chooseSkill -= AddSkill;
+        ActionBattleButton.actionButtonPress -= AddSkill;
         BattleChooseButton.addCurrentAction -= AddCurrentAction;
-        BattleControl.startOfTurnEvent += AddFirstSource;
+        BattleControl.startOfTurnEvent -= AddFirstSource;
     }
 
     public void AddFirstSource(GameBattleData data){
         tempAction.source = data.allyUnits[0].gameObject.GetComponent<Unit>();
+        chooseSource?.Invoke(tempAction.source);
     }
     public void AddSource(Unit unit){
         Debug.Log("Added Source");
         tempAction.source = unit.gameObject.GetComponent<Unit>();
+        chooseSource?.Invoke(unit);
         Debug.Log(tempAction.source.name);
        
     } 

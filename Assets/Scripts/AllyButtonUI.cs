@@ -12,7 +12,7 @@ public class AllyButtonUI : MonoBehaviour
     public GameObject SPBar;
     public GameObject UltBar;
     public Unit assignedUnit;
-    public static event Action<Unit> chooseSource;
+    public static event Action<Unit> allyButtonPress;
 
     void Awake(){
         assignedUnit ??= null;
@@ -35,7 +35,7 @@ public class AllyButtonUI : MonoBehaviour
 
     public void ChoosingSource(){
         Debug.Log("Source goes through");
-        chooseSource?.Invoke(assignedUnit);
+        allyButtonPress?.Invoke(assignedUnit);
     }
     // Start is called before the first frame update
     void Start()

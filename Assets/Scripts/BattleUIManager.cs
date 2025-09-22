@@ -9,17 +9,20 @@ using UnityEngine.UI;
 public class BattleUIManager : MonoBehaviour
 {
     //public GameObject UnitTargetArea;
-    //public GameObject ActionChoiceArea;
+    public GameObject actionChoiceArea;
     //public GameObject SkillChoiceArea;
     public GameObject allyResourceArea;
 
     public GameObject allyResourceButton;
+    public GameObject actionChoiceButton;
     
     void OnEnable(){
         BattleControl.startOfBattleEvent += SpawnAllyButtons;
+        ActionHolder.chooseSource += SpawnActionButtons;
     }
     void OnDisable(){
-        BattleControl.startOfBattleEvent += SpawnAllyButtons;
+        BattleControl.startOfBattleEvent -= SpawnAllyButtons;
+        ActionHolder.chooseSource -= SpawnActionButtons;
     }
     // Start is called before the first frame update
     void Start()
@@ -39,6 +42,13 @@ public class BattleUIManager : MonoBehaviour
             allyButton.GetComponent<AllyButtonUI>().assignedUnit = ally.GetComponent<Unit>();
         }
         
+    }
+    public void SpawnActionButtons(Unit unit){
+        //BattleControl.startOfTurnEvent += AddFirstSource;
+        foreach(BaseSkill skill in unit.skills){
+            GameObject actionButton = Instantiate(actionChoiceButton, actionChoiceArea.transform);
+            actionButton.GetComponent<ActionBattleButton>().assignedSkill = skill;
+        }
     }
 
 
