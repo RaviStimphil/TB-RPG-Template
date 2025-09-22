@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
 
 public class Unit : MonoBehaviour
 {
@@ -11,6 +13,7 @@ public class Unit : MonoBehaviour
     public bool isDead;
     public bool isGood;
     public List<BaseSkill> skills; 
+    public static event Action<Unit> currentStatusAlert;
     
     void OnEnable(){
         Debug.Log("Subscribing " + name);
@@ -22,6 +25,8 @@ public class Unit : MonoBehaviour
 
     public void RespondToEvent(UnitAction action){
         Debug.Log("It is currently working" + name);
+        currentStatusAlert?.Invoke(this.GetComponent<Unit>());
+
     }
     void Start(){
         unitStat = Instantiate(originStat);

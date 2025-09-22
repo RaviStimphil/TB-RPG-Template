@@ -23,17 +23,23 @@ public class ActionHolder : MonoBehaviour
 
     void OnEnable(){
         Debug.Log("Subscribing " + name);
-        BattleChooseButton.chooseSource += AddSource;
+        AllyButtonUI.chooseSource += AddSource;
         BattleChooseButton.chooseMainTarget += AddMainTarget;
         BattleChooseButton.chooseSkill += AddSkill;
         BattleChooseButton.addCurrentAction += AddCurrentAction;
+        BattleControl.startOfTurnEvent += AddFirstSource;
 
     }
     void OnDisable(){
-        BattleChooseButton.chooseSource -= AddSource;
+        AllyButtonUI.chooseSource -= AddSource;
         BattleChooseButton.chooseMainTarget -= AddMainTarget;
         BattleChooseButton.chooseSkill -= AddSkill;
         BattleChooseButton.addCurrentAction -= AddCurrentAction;
+        BattleControl.startOfTurnEvent += AddFirstSource;
+    }
+
+    public void AddFirstSource(GameBattleData data){
+        tempAction.source = data.allyUnits[0].gameObject.GetComponent<Unit>();
     }
     public void AddSource(Unit unit){
         Debug.Log("Added Source");

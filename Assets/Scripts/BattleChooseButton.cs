@@ -11,7 +11,7 @@ public class BattleChooseButton : MonoBehaviour
     public BaseSkill skill;
     public GameObject target;
 
-    public static event Action<Unit> chooseSource;
+    //public static event Action<Unit> chooseSource;
     public static event Action<BaseSkill> chooseSkill;
     public static event Action<Unit> chooseMainTarget;
     public static event Action addCurrentAction;
@@ -32,7 +32,7 @@ public class BattleChooseButton : MonoBehaviour
 
     public void ChoosingSource(){
         Debug.Log("Source goes through");
-        chooseSource?.Invoke(source.gameObject.GetComponent<Unit>());
+        //chooseSource?.Invoke(source.gameObject.GetComponent<Unit>());
     }
     public void ChoosingTarget(){
         Debug.Log("Target goes through");

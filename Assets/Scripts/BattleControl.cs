@@ -20,8 +20,11 @@ public class BattleControl : MonoBehaviour
     public int turnCount;
     public UnitAction actOne;
     public UnitAction actTwo;
+    public GameBattleData currentBattleData = new GameBattleData();
 
     public static event Action<UnitAction> AfterActionEvent;
+    public static event Action<GameObject[], GameObject[]> startOfBattleEvent;
+    public static event Action<GameBattleData> startOfTurnEvent;
 
 
     void OnEnable(){
@@ -33,6 +36,9 @@ public class BattleControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        currentBattleData.UpdateData(allyUnits, enemyUnits, turnCount);
+        startOfBattleEvent?.Invoke(allyUnits.ToArray(), enemyUnits.ToArray());
+        startOfTurnEvent?.Invoke(currentBattleData);
         actionQueue = new List<UnitAction>();
         if(actOne != null){
             Debug.Log("Not null baby");
