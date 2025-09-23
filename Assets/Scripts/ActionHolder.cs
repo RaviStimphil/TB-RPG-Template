@@ -12,7 +12,8 @@ public class ActionHolder : MonoBehaviour
     public List<UnitAction> currentActions;
 
     public static event Action<UnitAction[]> playerActions;
-    public static event Action<Unit> chooseSource; 
+    public static event Action<Unit> chooseSource;
+    public static event Action<BaseSkill> chooseSkill; 
     
     void Awake(){
         currentActions = new List<UnitAction>();
@@ -25,7 +26,7 @@ public class ActionHolder : MonoBehaviour
     void OnEnable(){
         Debug.Log("Subscribing " + name);
         AllyButtonUI.allyButtonPress += AddSource;
-        BattleChooseButton.chooseMainTarget += AddMainTarget;
+        TargetButtonSelect.targetEnemyButtonPress += AddMainTarget;
         ActionBattleButton.actionButtonPress += AddSkill;
         BattleChooseButton.addCurrentAction += AddCurrentAction;
         BattleControl.startOfTurnEvent += AddFirstSource;
@@ -54,6 +55,7 @@ public class ActionHolder : MonoBehaviour
     public void AddSkill(BaseSkill skill){
         Debug.Log("Added Skill");
         tempAction.skill = skill;
+        chooseSkill?.Invoke(skill);
     } 
 
     public void AddMainTarget(Unit unit){
