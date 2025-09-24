@@ -8,12 +8,11 @@ using System.Linq;
 public class ActionHolder : MonoBehaviour
 {
     public UnitAction tempAction;
-    public GameObject testUnit;
     public List<UnitAction> currentActions;
 
     public static event Action<UnitAction[]> playerActions;
-    public static event Action<Unit> chooseSource;
-    public static event Action<BaseSkill> chooseSkill; 
+    
+    public static event Action<UnitAction> addPlayerAction;
     
     void Awake(){
         currentActions = new List<UnitAction>();
@@ -41,13 +40,26 @@ public class ActionHolder : MonoBehaviour
     }
 
     public void AddFirstSource(GameBattleData data){
-        tempAction.source = data.allyUnits[0].gameObject.GetComponent<Unit>();
-        chooseSource?.Invoke(tempAction.source);
+        if(NextValidSource(data) != null){
+            tempAction.source = NextValidSource(data);
+        }
+        
+        //chooseSource?.Invoke(tempAction.source);
+    }
+    public Unit NextValidSource(GameBattleData data){
+        Unit chosen = new Unit();
+        for(int i = 0; i < data.allyUnits.Count; i++){
+            if(data.allyUnits[i].gameObject.GetComponent<Unit>().actionPoints.currentValue > 0 && !data.allyUnits[i].gameObject.GetComponent<Unit>().isDead){
+                chosen = data.allyUnits[i].gameObject.GetComponent<Unit>();
+                return chosen;
+            }
+        }
+        return null;
     }
     public void AddSource(Unit unit){
         Debug.Log("Added Source");
         tempAction.source = unit.gameObject.GetComponent<Unit>();
-        chooseSource?.Invoke(unit);
+        //chooseSource?.Invoke(unit);
         Debug.Log(tempAction.source.name);
        
     } 
@@ -55,7 +67,7 @@ public class ActionHolder : MonoBehaviour
     public void AddSkill(BaseSkill skill){
         Debug.Log("Added Skill");
         tempAction.skill = skill;
-        chooseSkill?.Invoke(skill);
+        //chooseSkill?.Invoke(skill);
     } 
 
     public void AddMainTarget(Unit unit){

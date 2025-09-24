@@ -37,7 +37,39 @@ public class UnitAction
         this.mainTarget = mainTarget;
         this.skill = skill;
     }
-    
+
+    public bool ValidAction(){
+        bool valid = true;
+        if(source == null){
+            Debug.Log("Source is null");
+            valid = false;
+        }
+        if(skill == null){
+            Debug.Log("Skill is null");
+            valid = false;
+        }
+        if(mainTarget == null){
+            Debug.Log("MainTarget is null");
+            valid = false;
+        }
+        return valid;
+    }
+    public void ClearAction(){
+        source = null;
+        mainTarget = null;
+        skill = null;
+    }
+
+    public UnitAction Clone(){
+        return new UnitAction{
+            source = this.source,
+            mainTarget = this.mainTarget,
+            skill = this.skill,
+            checkedThrough = this.checkedThrough,
+            turnCount = this.turnCount,
+            turnOrder = this.turnOrder
+        };
+    }
 
     /*public void AddTargets(Unit[] targets){
         //this.targets.AddRange(targets);

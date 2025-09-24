@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
     public string unitName;
     public bool isDead;
     public bool isGood;
+    public RefillStat actionPoints;
     public List<BaseSkill> skills; 
     public static event Action<Unit> currentStatusAlert;
     
@@ -28,8 +29,20 @@ public class Unit : MonoBehaviour
         currentStatusAlert?.Invoke(this.GetComponent<Unit>());
 
     }
+    void Awake(){
+        skills ??= new List<BaseSkill>();
+        actionPoints = new RefillStat();
+        actionPoints.AssignBaseValue(1);
+        actionPoints.RestoreCurrentValue(1);
+        Debug.Log(actionPoints.currentValue);
+    }
     void Start(){
         unitStat = Instantiate(originStat);
+        
+        
+    }
+    public Unit(){
+
     }
     public Unit(string name, int health, int attack, bool good){
         this.unitName = name;
@@ -53,5 +66,8 @@ public class Unit : MonoBehaviour
 
         }
         
+    }
+    public void ResetActionPoint(){
+        actionPoints.RestoreCurrentValue(1);
     }
 }

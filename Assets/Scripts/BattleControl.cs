@@ -15,45 +15,41 @@ public class BattleControl : MonoBehaviour
     public List<UnitAction> actionQueue;
 
     public string winner = "";
-    public UnityEvent BattleComplete;
     public bool endBattle; 
     public int turnCount;
-    public UnitAction actOne;
-    public UnitAction actTwo;
+    public UnitAction tempAction;
     public GameBattleData currentBattleData = new GameBattleData();
 
     public static event Action<UnitAction> AfterActionEvent;
     public static event Action<GameObject[], GameObject[]> startOfBattleEvent;
     public static event Action<GameBattleData> startOfTurnEvent;
+    public static event Action<Unit> chooseSource;
+    public static event Action<BaseSkill> chooseSkill; 
 
 
     void OnEnable(){
-        ActionHolder.playerActions += BattleLooper;
+        //ActionHolder.addPlayerAction +=
+        AllyButtonUI.allyButtonPress += AddSource;
+        TargetButtonSelect.targetEnemyButtonPress += AddMainTarget;
+        ActionBattleButton.actionButtonPress += AddSkill;
     }
     void OnDisable(){
-        ActionHolder.playerActions += BattleLooper;
+        AllyButtonUI.allyButtonPress -= AddSource;
+        TargetButtonSelect.targetEnemyButtonPress -= AddMainTarget;
+        ActionBattleButton.actionButtonPress -= AddSkill;
+    }
+    void Awake(){
+        tempAction = new UnitAction();
+        actionQueue = new List<UnitAction>();
     }
     // Start is called before the first frame update
     void Start()
     {
         currentBattleData.UpdateData(allyUnits, enemyUnits, turnCount);
         startOfBattleEvent?.Invoke(allyUnits.ToArray(), enemyUnits.ToArray());
-        startOfTurnEvent?.Invoke(currentBattleData);
-        actionQueue = new List<UnitAction>();
-        if(actOne != null){
-            Debug.Log("Not null baby");
-        }else{
-            Debug.Log("Is null");
-        }
-        actOne = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
-        actTwo = new UnitAction(enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>().skills[0]);
         
-        //AddToActionQueue(actOne);
-        //AddToActionQueue(actTwo);
-
-        UnitAction newAction = null;
-        newAction = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
-        
+        StartOfTurn();
+    
     }
 
 
@@ -65,9 +61,20 @@ public class BattleControl : MonoBehaviour
         }*/
     }
 
-    public void BattleLooper(UnitAction[] actions){
+    
+    /*public void BattleLooper(UnitAction[] actions){
         actionQueue.AddRange(actions);
         BattleLoop();
+    }*/
+    public void StartOfTurn(){
+        startOfTurnEvent?.Invoke(currentBattleData);
+        foreach(GameObject unit in allyUnits){
+            unit.gameObject.GetComponent<Unit>().ResetActionPoint();
+        }
+        foreach(GameObject unit in enemyUnits){
+            unit.gameObject.GetComponent<Unit>().ResetActionPoint();
+        }
+        AddFirstSource();
     }
     public void BattleLoop(){
         
@@ -83,6 +90,58 @@ public class BattleControl : MonoBehaviour
         }
 
         
+    }
+
+    public void AddFirstSource(){
+        Debug.Log("First source");
+        Unit validSource = NextValidSource();
+        if(validSource != null){
+            tempAction.source = validSource;
+            chooseSource?.Invoke(tempAction.source);
+        }
+        else{
+            BattleLoop();
+        }
+        
+        
+    }
+    public Unit NextValidSource(){
+        if(allyUnits.Count < 1){
+            Debug.Log("Nothing in allyUnits yet");    
+        }
+        for(int i = 0; i < allyUnits.Count; i++){
+            if(allyUnits[i].gameObject.GetComponent<Unit>().actionPoints.currentValue > 0 && !allyUnits[i].gameObject.GetComponent<Unit>().isDead){
+                Unit chosen = allyUnits[i].gameObject.GetComponent<Unit>();
+                return chosen;
+            }
+        }
+        return null;
+    }
+    public void AddSource(Unit unit){
+        Debug.Log("Added Source");
+        tempAction.source = unit.gameObject.GetComponent<Unit>();
+        chooseSource?.Invoke(unit);
+        Debug.Log(tempAction.source.name);
+       
+    } 
+
+    public void AddSkill(BaseSkill skill){
+        Debug.Log("Added Skill");
+        tempAction.skill = skill;
+        chooseSkill?.Invoke(skill);
+    } 
+
+    public void AddMainTarget(Unit unit){
+        Debug.Log("Added Target");
+        tempAction.mainTarget = unit.gameObject.GetComponent<Unit>();
+        Debug.Log(tempAction.mainTarget.name);
+        if(tempAction.ValidAction()){
+            AddToActionQueue(tempAction.Clone());
+            tempAction.ClearAction();
+            AddFirstSource();
+        }else{
+            Debug.Log("Action not finished");
+        }
     }
 
     
@@ -151,30 +210,9 @@ public class BattleControl : MonoBehaviour
         return null; 
     }
 
-    public void MakeAddNewAction(){
-        UnitAction allyAction = null;
-        allyAction = new UnitAction(allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>().skills[0]);
-        AddToActionQueue(allyAction);
+    
 
-        UnitAction enemyAction = null;
-        enemyAction = new UnitAction(enemyUnits[0].GetComponent<Unit>(), allyUnits[0].GetComponent<Unit>(), enemyUnits[0].GetComponent<Unit>().skills[0]);
-        AddToActionQueue(enemyAction);
-    }
-
-    public void TurnStart(){
-        Debug.Log("Turn Count: " + turnCount);
-        activeUnits.AddRange(AddAliveMembers(allyUnits.ToArray()));
-        if(activeUnits.Count == 0){
-            winner = "Enemy Won";
-            endBattle = true;
-        }
-        activeUnits.AddRange(AddAliveMembers(enemyUnits.ToArray()));
-        if(AddAliveMembers(allyUnits.ToArray()).Count == activeUnits.Count){
-            winner = "Ally Won";
-            endBattle = true;
-        }
-
-    }
+    
 
     public List<GameObject> AddAliveMembers(GameObject[] army){
         List<GameObject> finalArmy = new List<GameObject>();
@@ -186,34 +224,18 @@ public class BattleControl : MonoBehaviour
         return finalArmy;
     }
 
-    public void TurnAction(){
-        while(activeUnits.Count > 0){
-            if(activeUnits[0].gameObject.GetComponent<Unit>().isGood){
-                if(TopAliveUnit(enemyUnits) != null){
-                    activeUnits[0].gameObject.GetComponent<Unit>().DealDamage(TopAliveUnit(enemyUnits));
-                }
-                
-            }
-            else{
-                if(TopAliveUnit(allyUnits) != null){
-                    activeUnits[0].gameObject.GetComponent<Unit>().DealDamage(TopAliveUnit(allyUnits));
-                }
-                
-            }
-            activeUnits.RemoveAt(0);
-        }
-    }
+    
+    //The 1's will be changed to like the action value of the skill. 
     public void AddToActionQueue(UnitAction action){
-        if(action == null){
-            Debug.Log("action is null");
-        }
-        Debug.Log(actionQueue.Count);
+        action.source.actionPoints.currentValue -= 1;
         actionQueue.Add(action);
     }
     public void RemoveFromActionQueue(UnitAction action){
+        action.source.actionPoints.currentValue += 1;
         actionQueue.Remove(action);
     }
     public void BeforeActionExecute(UnitAction action){
+        Debug.Log(action.mainTarget.name);
         if(action.mainTarget.isDead){
             Debug.Log("Target is dead");
         }else{
