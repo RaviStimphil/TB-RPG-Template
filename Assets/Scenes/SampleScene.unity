@@ -1527,6 +1527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allyUnits:
   - {fileID: 107586034}
+  - {fileID: 1342373268}
   enemyUnits:
   - {fileID: 392956603}
   activeUnits: []
@@ -2540,6 +2541,57 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &1342373268
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1342373270}
+  - component: {fileID: 1342373269}
+  m_Layer: 0
+  m_Name: Anna (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1342373269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342373268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d0253af22ea0845b97553cc35cb8ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originStat: {fileID: 11400000, guid: 7108dc6cdb30a9b4f94694dac4fdb508, type: 2}
+  unitStat: {fileID: 0}
+  unitName: 
+  isDead: 0
+  isGood: 1
+  skills:
+  - {fileID: 11400000, guid: 9a0e7b4f6b45987489be10d2729b96b1, type: 2}
+--- !u!4 &1342373270
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342373268}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1397048063
 GameObject:
   m_ObjectHideFlags: 0
@@ -3169,6 +3221,10 @@ PrefabInstance:
     - target: {fileID: 550193019808042291, guid: f5d82cdbe7c527a4d86715ed1e6feb24, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 550193019912528540, guid: f5d82cdbe7c527a4d86715ed1e6feb24, type: 3}
+      propertyPath: m_Color.a
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5d82cdbe7c527a4d86715ed1e6feb24, type: 3}

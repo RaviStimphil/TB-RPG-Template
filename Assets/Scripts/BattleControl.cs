@@ -23,8 +23,10 @@ public class BattleControl : MonoBehaviour
     public static event Action<UnitAction> AfterActionEvent;
     public static event Action<GameObject[], GameObject[]> startOfBattleEvent;
     public static event Action<GameBattleData> startOfTurnEvent;
+    public static event Action<GameBattleData> endOfTurnEvent;
     public static event Action<Unit> chooseSource;
-    public static event Action<BaseSkill> chooseSkill; 
+    public static event Action<BaseSkill> chooseSkill;
+
 
 
     void OnEnable(){
@@ -61,11 +63,6 @@ public class BattleControl : MonoBehaviour
         }*/
     }
 
-    
-    /*public void BattleLooper(UnitAction[] actions){
-        actionQueue.AddRange(actions);
-        BattleLoop();
-    }*/
     public void StartOfTurn(){
         startOfTurnEvent?.Invoke(currentBattleData);
         foreach(GameObject unit in allyUnits){
@@ -75,6 +72,11 @@ public class BattleControl : MonoBehaviour
             unit.gameObject.GetComponent<Unit>().ResetActionPoint();
         }
         AddFirstSource();
+    }
+    public void EndOfTurn(){
+        turnCount++;
+        endOfTurnEvent?.Invoke(currentBattleData);
+        StartOfTurn();
     }
     public void BattleLoop(){
         
@@ -88,7 +90,7 @@ public class BattleControl : MonoBehaviour
             endBattle = true;
             Debug.Log("It has ended");
         }
-
+        EndOfTurn();
         
     }
 
@@ -118,13 +120,23 @@ public class BattleControl : MonoBehaviour
         return null;
     }
     public void AddSource(Unit unit){
-        Debug.Log("Added Source");
-        tempAction.source = unit.gameObject.GetComponent<Unit>();
-        chooseSource?.Invoke(unit);
-        Debug.Log(tempAction.source.name);
+        if(UnitAvailable(unit)){
+            Debug.Log("Added Source");
+            tempAction.source = unit.gameObject.GetComponent<Unit>();
+            chooseSource?.Invoke(unit);
+            Debug.Log(tempAction.source.name);
+        }
+        
        
     } 
-
+    public bool UnitAvailable(Unit unit){
+        if(unit.isDead || unit.actionPoints.currentValue < 1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
     public void AddSkill(BaseSkill skill){
         Debug.Log("Added Skill");
         tempAction.skill = skill;
@@ -198,21 +210,7 @@ public class BattleControl : MonoBehaviour
 
     }
 
-    public GameObject TopAliveUnit(List<GameObject> army){
-        if (army == null || army.Count == 0) return null;
 
-        for (int i = 0; i < army.Count; i++){
-            if (army[i] != null && !army[i].gameObject.GetComponent<Unit>().isDead){
-                return army[i]; 
-            }
-        }
-
-        return null; 
-    }
-
-    
-
-    
 
     public List<GameObject> AddAliveMembers(GameObject[] army){
         List<GameObject> finalArmy = new List<GameObject>();

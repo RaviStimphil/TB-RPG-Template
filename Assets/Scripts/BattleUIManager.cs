@@ -54,22 +54,7 @@ public class BattleUIManager : MonoBehaviour
         while (actionChoiceArea.transform.childCount > 0) {
             DestroyImmediate(actionChoiceArea.transform.GetChild(0).gameObject);
         }
-        if (unit == null){
-            Debug.LogError("SpawnActionButtons received a NULL unit!");
-            return;
-        }
-        if (unit.skills == null){
-            Debug.LogError("Unit " + unit.name + " has NULL skills list!");
-            return;
-        }
-        if (actionChoiceArea == null){
-            Debug.LogError("actionChoiceArea is not assigned in inspector!");
-            return;
-        }
-        if (actionChoiceButton == null){
-            Debug.LogError("actionChoiceButton prefab is not assigned in inspector!");
-            return;
-        }
+        
         foreach(BaseSkill skill in unit.skills){
             GameObject actionButton = Instantiate(actionChoiceButton, actionChoiceArea.transform);
             actionButton.GetComponent<ActionBattleButton>().assignedSkill = skill;
