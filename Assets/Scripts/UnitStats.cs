@@ -13,6 +13,8 @@ public class UnitStats : ScriptableObject
     public int attack;
     public int speed;
 
+    public Dictionary<Unit, int> hateBuildup = new Dictionary<Unit, int>();
+
     private List<Buff> buffs;
 
     public int basePhysicalDefense;

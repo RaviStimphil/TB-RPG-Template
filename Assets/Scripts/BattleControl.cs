@@ -82,6 +82,7 @@ public class BattleControl : MonoBehaviour
         
   
         //MakeAddNewAction();
+        EnemiesAddAction();
         UnitAction[] tempActions = SortActionQueue(actionQueue.ToArray());
         actionQueue.Clear();
         actionQueue.AddRange(tempActions);
@@ -93,7 +94,15 @@ public class BattleControl : MonoBehaviour
         EndOfTurn();
         
     }
-
+    public void EnemiesAddAction(){
+        foreach(GameObject unit in enemyUnits){
+            tempAction.source = unit.GetComponent<Unit>();
+            tempAction.skill = unit.GetComponent<Unit>().skills[0];
+            tempAction.mainTarget = allyUnits[0].GetComponent<Unit>();
+            AddToActionQueue(tempAction.Clone());
+            tempAction.ClearAction();
+       }
+    }
     public void AddFirstSource(){
         Debug.Log("First source");
         Unit validSource = NextValidSource();
