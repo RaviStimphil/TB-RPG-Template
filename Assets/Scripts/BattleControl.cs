@@ -96,6 +96,7 @@ public class BattleControl : MonoBehaviour
     }
     public void EnemiesAddAction(){
         foreach(GameObject unit in enemyUnits){
+            //for loop for going through action points.
             tempAction.source = unit.GetComponent<Unit>();
             tempAction.skill = unit.GetComponent<Unit>().skills[0];
             tempAction.mainTarget = allyUnits[0].GetComponent<Unit>();
