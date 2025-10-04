@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[Serializable]
 public class Stat 
 {
     public int baseValue;
@@ -27,7 +28,7 @@ public class Stat
     }
 
     public void AssignEquipValue(int value){
-        equipmentValue = value;
+        equipmentValue += value;
     }
     public void AdjustBuff(int value){
         buffValue += value;

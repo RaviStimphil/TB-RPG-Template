@@ -99,7 +99,7 @@ public class BattleControl : MonoBehaviour
             //for loop for going through action points.
             tempAction.source = unit.GetComponent<Unit>();
             tempAction.skill = unit.GetComponent<Unit>().skills[0];
-            tempAction.mainTarget = allyUnits[0].GetComponent<Unit>();
+            tempAction.mainTarget = unit.GetComponent<Unit>().unitStat.ChooseTarget(allyUnits);
             AddToActionQueue(tempAction.Clone());
             tempAction.ClearAction();
        }

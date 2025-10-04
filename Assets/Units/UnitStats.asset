@@ -16,3 +16,18 @@ MonoBehaviour:
   currentHealth: 60
   attack: 8
   speed: 0
+  basePhysicalDefense: 0
+  ratioPhysicalDefense: 1
+  addedPhysicalDefense: 0
+  equipPhysicalDefense: 0
+  finalPhysicalDefense: 0
+  aggro:
+    baseValue: 40
+    equipmentValue: 0
+    ratioValue: 1
+    addedValue: 0
+    finalValue: 0
+    buffValue: 0
+    unlimittedBuff: 0
+    maxBuffRatio: 1.5
+    MinBuffRatio: 0.65

@@ -12,12 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f052f7e4dd6af841ac0b8827a95a2cb, type: 3}
   m_Name: EnemyStats
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  currentHealth: 0
-  attack: 0
+  maxHealth: 60
+  currentHealth: 60
+  attack: 8
   speed: 0
   basePhysicalDefense: 0
   ratioPhysicalDefense: 1
   addedPhysicalDefense: 0
   equipPhysicalDefense: 0
   finalPhysicalDefense: 0
+  aggro:
+    baseValue: 40
+    equipmentValue: 0
+    ratioValue: 1
+    addedValue: 0
+    finalValue: 0
+    buffValue: 0
+    unlimittedBuff: 0
+    maxBuffRatio: 1.5
+    MinBuffRatio: 0.65
