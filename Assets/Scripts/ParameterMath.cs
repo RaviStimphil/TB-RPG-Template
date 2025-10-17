@@ -10,7 +10,9 @@ public static class ParameterMath
             
         return speed;
     }
-
+    public static int BasicDamageCalculation(UnitAction thing){
+        return 0;
+    }
     public static int FinalParameter(int baseAmount, float ratioAmount, int addedAmount, int equipAmount){
         int finalAmount = 0;
         finalAmount = (int) Mathf.Round((baseAmount + equipAmount) * ratioAmount + addedAmount);

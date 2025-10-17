@@ -24,6 +24,8 @@ public class UnitStats : ScriptableObject
     public int finalPhysicalDefense;
 
     public Stat aggro;
+    public Stat attackStat;
+    public Stat defenseStat;
     
     
     // Start is called before the first frame update
